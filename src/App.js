@@ -1,22 +1,32 @@
 import React, {Component} from 'react';
-import Card from './Card';
+import CardList from './CardList';
 import {footballers} from './footballers';
+import SearchBox from './SearchBox'
 
 class App extends Component {
 
 	constructor(){
 		super();
+		this.state = {
+			footballers: footballers, 
+			searchBox: ''
+		};
+	}
+
+	updateOnSearch = (event) => {
+		this.setState({searchBox: event.target.value});
 	}
 
 	render() {
+		const filterFootballers = footballers.filter(footballer => {
+			return footballer.name.includes(this.state.searchBox);
+		});
+
 		return (
 			<div className ="tc">
-				<h1>"Top footballers"</h1>
-				<Card id={footballers[0].id} name={footballers[0].name} position={footballers[0].position} />
-				<Card id={footballers[1].id} name={footballers[1].name} position={footballers[1].position} />
-				<Card id={footballers[2].id} name={footballers[2].name} position={footballers[2].position} />
-				<Card id={footballers[3].id} name={footballers[3].name} position={footballers[3].position} />
-				<Card id={footballers[4].id} name={footballers[4].name} position={footballers[4].position} />
+				<h1 className="ttu">Top footballers</h1>
+				<SearchBox searchChange={this.updateOnSearch} value={this.state.searchBox} />
+				<CardList footballers={filterFootballers}/>
 			</div> 
 		)
 	}
